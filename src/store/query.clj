@@ -10,28 +10,35 @@
   
 (defn get-user [korisnikId]
   (first
-    (select korisnik
-          (where {:korisnikId [= korisnikId]}))))
+  (select korisnik
+    (where {:korisnikId [= korisnikId]} )
+    (limit 1))))
 
 (defn add-user [newKorisnik]
-  (insert korisnik
-          (values {
-            :ime (get newKorisnik :ime)
-            :prezime (get newKorisnik :prezime)
-            :korisnickoIme (get newKorisnik :korisnickoIme)
-            :korisnickaSifra (get newKorisnik :korisnickaSifra)
-          })
-  )
+  (def result (insert korisnik
+    (values {
+      :ime (get newKorisnik :ime)
+      :prezime (get newKorisnik :prezime)
+      :korisnickoIme (get newKorisnik :korisnickoIme)
+      :korisnickaSifra (get newKorisnik :korisnickaSifra)
+    })
+  ))
+  (def insertedId (get result :generated_key))
+  (get-user insertedId)
 )
 
-(defn update-user [korisnikId ime prezime korisnickoIme korisnickaSifra]
+(defn update-user [korisnikId updatedKorisnik]
   (update korisnik
-          (set-fields {:ime ime
-            :prezime prezime
-            :korisnickoIme korisnickoIme
-            :korisnickaSifra korisnickaSifra})
-          (where {:korisnikId [= korisnikId]})))
+    (set-fields {
+      :ime (get updatedKorisnik :ime)
+      :prezime (get updatedKorisnik :prezime)
+      :korisnickoIme (get updatedKorisnik :korisnickoIme)
+      :korisnickaSifra (get updatedKorisnik :korisnickaSifra)
+    })
+    (where {:korisnikId [= korisnikId]}))
+  (get-user korisnikId)
+)
           
 (defn delete-user [korisnikId]
   (delete korisnik
-          (where {:korisnikId [= korisnikId]})))
+    (where {:korisnikId [= korisnikId]})))

@@ -9,7 +9,7 @@
   :ime             String
   :prezime         String
   :korisnickoIme   String
-  :korisnickaSifra String 
+  :korisnickaSifra String
 })
 
 (s/defschema NewKorisnik (dissoc Korisnik :korisnikId))
