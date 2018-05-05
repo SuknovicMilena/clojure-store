@@ -1,6 +1,6 @@
 (ns store.query
   (:require [store.database]
-            [store.domain :refer :all]
+            [domain.korisnik :refer :all]
             [korma.core :refer :all]))
 
 (defentity korisnik)

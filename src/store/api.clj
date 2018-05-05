@@ -2,7 +2,7 @@
   (:require [compojure.api.sweet :refer :all]
             [ring.util.http-response :refer :all]
             [schema.core :as s]
-            [store.domain :refer :all]
+            [domain.korisnik :refer :all]
             [store.query :refer :all]))
 
 (def app
