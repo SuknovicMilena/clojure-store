@@ -5,25 +5,25 @@
 
 (defentity korisnik)
 
-(defn get-users []
+(defn get-korisnici []
   (select korisnik))
   
-(defn get-user [korisnikId]
+(defn get-korisnik [korisnikId]
   (first
   (select korisnik
     (where {:korisnikId [= korisnikId]} )
     (limit 1))))
 
-(defn get-user-by-username [korisnickoIme]
+(defn get-korisnik-by-korisnicko-ime [korisnickoIme]
   (first
   (select korisnik
     (where {:korisnickoIme [= korisnickoIme]} )
     (limit 1))))
 
-(defn add-user [newKorisnik]
-  (def existingUser (get-user-by-username (get newKorisnik :korisnickoIme)))
-  (if existingUser 
-    "User with that username already exists"
+(defn add-korisnik [newKorisnik]
+  (def existingKorisnik (get-korisnik-by-korisnicko-ime (get newKorisnik :korisnickoIme)))
+  (if existingKorisnik 
+    "Korisnik sa tim korisnickim imenom vec postoji"
     ((def result (insert korisnik
       (values {
         :ime (get newKorisnik :ime)
@@ -33,7 +33,7 @@
         })
       ))
       (def insertedId (get result :generated_key))
-      (get-user insertedId)
+      (get-korisnik insertedId)
     )
   )
 )
@@ -41,13 +41,13 @@
 (defn parse-int [s]
   (Integer/parseInt (re-find #"\A-?\d+" s)))
 
-(defn update-user [korisnikId updatedKorisnik]
-  (def existingUser (get-user korisnikId))
-  (def existingUserByUsername (get-user-by-username (get updatedKorisnik :korisnickoIme)))
-  ; (println (not= (parse-int korisnikId) (get existingUserByUsername :korisnikId)))
-  (if existingUser 
-    (if (and existingUserByUsername (not= (parse-int korisnikId) (get existingUserByUsername :korisnikId))) 
-      "User with that username already exists"
+(defn update-korisnik [korisnikId updatedKorisnik]
+  (def existingKorisnik (get-korisnik korisnikId))
+  (def existingKorisnikByKorisnickoIme (get-korisnik-by-korisnicko-ime (get updatedKorisnik :korisnickoIme)))
+  ; (println (not= (parse-int korisnikId) (get existingKorisnikByKorisnickoIme :korisnikId)))
+  (if existingKorisnik 
+    (if (and existingKorisnikByKorisnickoIme (not= (parse-int korisnikId) (get existingKorisnikByKorisnickoIme :korisnikId))) 
+      "Korisnik sa tim korisnickim imenom vec postoji"
       (update korisnik
         (set-fields {
           :ime (get updatedKorisnik :ime)
@@ -57,15 +57,15 @@
         })
         (where {:korisnikId [= korisnikId]}))
     )
-    "Cannot find user with that id"
+    "Ne postoji korisnik sa tim ID-em"
   )
 )
           
-(defn delete-user [korisnikId]
-  (def existingUser (get-user korisnikId))
-  (if existingUser 
+(defn delete-korisnik [korisnikId]
+  (def existingKorisnik (get-korisnik korisnikId))
+  (if existingKorisnik 
     (delete korisnik
       (where {:korisnikId [= korisnikId]}))
-    "User with that id does not exist"
+    "Ne postoji korisnik sa tim ID-em"
   )
 )

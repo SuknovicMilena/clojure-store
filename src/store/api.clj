@@ -11,29 +11,29 @@
      {:ui "/"
       :spec "/swagger.json"
       :data {:info {:title "GlassesStore API"
-                    :description "API for a college project made with clojure"}
-             :tags [{:name "users", :description "users api."}]}}}
+                    :description "API prodavnice naocara"}
+             :tags [{:name "korisnici", :description "Korisnik API."}]}}}
 
-    ; Users API
-    (context "/users" []
-      :tags ["users"]
+    ; Korisnik API
+    (context "/korisnici" []
+      :tags ["korisnici"]
 
       (GET "/" []
         :return [Korisnik]
-        :summary "Gets all users"
-        (ok (get-users)))
+        :summary "Vrati sve korisnike"
+        (ok (get-korisnici)))
 
       (GET "/:id" []
         :path-params [id :- s/Any]
-        :summary "Get user by ID specified"
-        (def userFromDb (get-user id))
-        (if userFromDb (ok userFromDb) (not-found))
+        :summary "Vrati korisnika po ID-u"
+        (def korisnikFromDb (get-korisnik id))
+        (if korisnikFromDb (ok korisnikFromDb) (not-found))
       )
 
       (POST "/" []
-        :summary "Creates a new user"
+        :summary "Kreiraj novog korisnika"
         :body [newKorisnik NewKorisnik]
-        (def createResult (add-user newKorisnik))
+        (def createResult (add-korisnik newKorisnik))
         (if (= (type createResult) java.lang.String) 
           (bad-request createResult)
           (ok createResult) 
@@ -41,10 +41,10 @@
       )
 
       (PUT "/:id" []
-        :summary "Updates existing user"
+        :summary "Azuriraj postojeceg korisnika"
         :path-params [id :- s/Any]
         :body [updatedKorisnik NewKorisnik]
-        (def updateResult (update-user id updatedKorisnik))
+        (def updateResult (update-korisnik id updatedKorisnik))
         (if (= (type updateResult) java.lang.Integer) 
           (ok nil) 
           (bad-request updateResult)
@@ -52,9 +52,9 @@
       )
 
       (DELETE "/:id" []
-        :summary "Deletes existing user"
+        :summary "Obrisi korisnika"
         :path-params [id :- s/Any]
-        (def deleteResult (delete-user id))
+        (def deleteResult (delete-korisnik id))
         (if (= (type deleteResult) java.lang.String) 
           (bad-request deleteResult)
           (ok nil) 
