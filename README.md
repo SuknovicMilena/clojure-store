@@ -32,6 +32,19 @@ On the root of the repo, in the db/ folder you'll find an .sql file that you wil
 
 Run `lein ring server` in the root of the project to run the actual app. This will start a web server and open the home page of Swagger API documentation.
 
+## Project architecture
+
+`/db` holds latest database restore.
+
+`/src/domain` holds the domain entities that provide an image of the DB tables.
+
+`/src/mysql` contains code to provide a connection to the MySQL server
+
+`/src/repository` abstracts the individual entities SQL related logic - data layer
+
+`/src/store` contains the api.clj file that provides the app logic - API routes. This layer responds to HTTP requests and calls the data layer to eventually return HTTP responses with the results gotten from data layer.
+
+`/src/utility` contains helpers
 
 ## Libraries with versions
 
