@@ -32,19 +32,33 @@
       (POST "/" []
         :summary "Creates a new user"
         :body [newKorisnik NewKorisnik]
-        (ok (add-user newKorisnik)))
+        (def createResult (add-user newKorisnik))
+        (if (= (type createResult) java.lang.String) 
+          (bad-request createResult)
+          (ok createResult) 
+        )
+      )
 
       (PUT "/:id" []
         :summary "Updates existing user"
         :path-params [id :- s/Any]
         :body [updatedKorisnik NewKorisnik]
-        (ok (update-user id updatedKorisnik)))
+        (def updateResult (update-user id updatedKorisnik))
+        (if (= (type updateResult) java.lang.Integer) 
+          (ok nil) 
+          (bad-request updateResult)
+        )
+      )
 
       (DELETE "/:id" []
         :summary "Deletes existing user"
         :path-params [id :- s/Any]
-        (delete-user id)
-        (ok nil))
+        (def deleteResult (delete-user id))
+        (if (= (type deleteResult) java.lang.String) 
+          (bad-request deleteResult)
+          (ok nil) 
+        )
+      )
     )
   )
 )

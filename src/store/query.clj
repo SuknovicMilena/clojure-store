@@ -38,27 +38,27 @@
   )
 )
 
+(defn parse-int [s]
+  (Integer/parseInt (re-find #"\A-?\d+" s)))
+
 (defn update-user [korisnikId updatedKorisnik]
   (def existingUser (get-user korisnikId))
   (def existingUserByUsername (get-user-by-username (get updatedKorisnik :korisnickoIme)))
-  
+  ; (println korisnikId)
+  ; (println (get existingUserByUsername :korisnikId))
+  ; (println (not= (parse-int korisnikId) (get existingUserByUsername :korisnikId)))
   (if existingUser 
-    (
-      (if existingUserByUsername 
-        (constantly "User with that username already exists") 
-        (
-          (update korisnik
-            (set-fields {
-              :ime (get updatedKorisnik :ime)
-              :prezime (get updatedKorisnik :prezime)
-              :korisnickoIme (get updatedKorisnik :korisnickoIme)
-              :korisnickaSifra (get updatedKorisnik :korisnickaSifra)
-            })
-            (where {:korisnikId [= korisnikId]}))
-          (constantly nil)
-        )
-      )
-    ) 
+    (if (and existingUserByUsername (not= (parse-int korisnikId) (get existingUserByUsername :korisnikId))) 
+      "User with that username already exists"
+      (update korisnik
+        (set-fields {
+          :ime (get updatedKorisnik :ime)
+          :prezime (get updatedKorisnik :prezime)
+          :korisnickoIme (get updatedKorisnik :korisnickoIme)
+          :korisnickaSifra (get updatedKorisnik :korisnickaSifra)
+        })
+        (where {:korisnikId [= korisnikId]}))
+    )
     "Cannot find user with that id"
   )
 )
