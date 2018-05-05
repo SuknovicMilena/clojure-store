@@ -8,7 +8,7 @@
   :cena            Double
   :boja            String
   :tip             String
-  :proizvodjacId   String
+  :proizvodjacId   Integer
 })
 
 (s/defschema NewProizvod (dissoc Proizvod :proizvodId))

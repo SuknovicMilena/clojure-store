@@ -8,6 +8,6 @@
   :zemlja          String
 })
 
-(s/defschema NewProzvodjac (dissoc Proizvodjac :proizvodjacId))
+(s/defschema NewProizvodjac (dissoc Proizvodjac :proizvodjacId))
             
             

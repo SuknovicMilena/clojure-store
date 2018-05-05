@@ -4,8 +4,10 @@
             [schema.core :as s]
             [domain.korisnik :refer :all]
             [domain.proizvodjac :refer :all]
+            [domain.proizvod :refer :all]
             [repository.korisnik :refer :all]
             [repository.proizvodjac :refer :all]
+            [repository.proizvod :refer :all]
   )
 )
 
@@ -19,8 +21,9 @@
         :data {
           :info { :title "GlassesStore API" :description "API prodavnice naocara"}
           :tags [
-            {:name "korisnici", :description "Korisnik API."}
-            {:name "proizvodjaci", :description "Proizvodjac API."}
+            {:name "korisnici", :description "Korisnik API endpoints."}
+            {:name "proizvodjaci", :description "Proizvodjac API endpoints."}
+            {:name "proizvodi", :description "Proizvod API endpoints."}
           ]
         }
       }
@@ -93,7 +96,7 @@
 
       (POST "/" []
         :summary "Kreiraj novog proizvodjaca"
-        :body [newProizvodjac NewProzvodjac]
+        :body [newProizvodjac NewProizvodjac]
         (def createResult (add-proizvodjac newProizvodjac))
         (if (= (type createResult) java.lang.String) 
           (bad-request createResult)
@@ -104,7 +107,7 @@
       (PUT "/:id" []
         :summary "Azuriraj postojeceg proizvodjaca"
         :path-params [id :- s/Any]
-        :body [updatedProizvodjac NewProzvodjac]
+        :body [updatedProizvodjac NewProizvodjac]
         (def updateResult (update-proizvodjac id updatedProizvodjac))
         (if (= (type updateResult) java.lang.Integer) 
           (ok nil) 
@@ -124,6 +127,52 @@
     )
 
 
+    ; Proizvod API
+    (context "/proizvodi" []
+      :tags ["proizvodi"]
 
+      (GET "/" []
+        :return [Proizvod]
+        :summary "Vrati sve proizvode"
+        (ok (get-proizvodi)))
+
+      (GET "/:id" []
+        :path-params [id :- s/Any]
+        :summary "Vrati proizvod po ID-u"
+        (def proizvodFromDb (get-proizvod id))
+        (if proizvodFromDb (ok proizvodFromDb) (not-found))
+      )
+
+      (POST "/" []
+        :summary "Kreiraj novi proizvod"
+        :body [newProizvod NewProizvod]
+        (def createResult (add-proizvod newProizvod))
+        (if (= (type createResult) java.lang.String) 
+          (bad-request createResult)
+          (ok createResult) 
+        )
+      )
+
+      (PUT "/:id" []
+        :summary "Azuriraj postojeci proizvod"
+        :path-params [id :- s/Any]
+        :body [updatedProizvod NewProizvod]
+        (def updateResult (update-proizvod id updatedProizvod))
+        (if (= (type updateResult) java.lang.Integer) 
+          (ok nil) 
+          (bad-request updateResult)
+        )
+      )
+
+      (DELETE "/:id" []
+        :summary "Obrisi proizvod"
+        :path-params [id :- s/Any]
+        (def deleteResult (delete-proizvod id))
+        (if (= (type deleteResult) java.lang.String) 
+          (bad-request deleteResult)
+          (ok nil) 
+        )
+      )
+    )
   )
 )
