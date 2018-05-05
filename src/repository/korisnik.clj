@@ -1,6 +1,7 @@
 (ns repository.korisnik
   (:require [mysql.connection]
             [domain.korisnik :refer :all]
+            [utility.helpers :refer :all]
             [korma.core :refer :all]))
 
 (defentity korisnik)
@@ -24,7 +25,7 @@
   (def existingKorisnik (get-korisnik-by-korisnicko-ime (get newKorisnik :korisnickoIme)))
   (if existingKorisnik 
     "Korisnik sa tim korisnickim imenom vec postoji"
-    ((def result (insert korisnik
+    ((def insertKorisnikResult (insert korisnik
       (values {
         :ime (get newKorisnik :ime)
         :prezime (get newKorisnik :prezime)
@@ -32,14 +33,11 @@
         :korisnickaSifra (get newKorisnik :korisnickaSifra)
         })
       ))
-      (def insertedId (get result :generated_key))
-      (get-korisnik insertedId)
+      (def insertedKorisnikId (get insertKorisnikResult :generated_key))
+      (get-korisnik insertedKorisnikId)
     )
   )
 )
-
-(defn parse-int [s]
-  (Integer/parseInt (re-find #"\A-?\d+" s)))
 
 (defn update-korisnik [korisnikId updatedKorisnik]
   (def existingKorisnik (get-korisnik korisnikId))
