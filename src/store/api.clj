@@ -23,10 +23,11 @@
         (ok (get-users)))
 
       (GET "/:id" []
-        :return Korisnik
         :path-params [id :- s/Any]
         :summary "Get user by ID specified"
-        (ok (get-user id)))
+        (def userFromDb (get-user id))
+        (if userFromDb (ok userFromDb) (not-found))
+      )
 
       (POST "/" []
         :summary "Creates a new user"
@@ -42,7 +43,8 @@
       (DELETE "/:id" []
         :summary "Deletes existing user"
         :path-params [id :- s/Any]
-        (ok (delete-user id)))
+        (delete-user id)
+        (ok nil))
     )
   )
 )
