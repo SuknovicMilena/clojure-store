@@ -1,4 +1,4 @@
-(ns store.database
+(ns mysql.connection
   (:require [korma.db :as korma]))
 
 (def db-connection-info (korma/mysql 

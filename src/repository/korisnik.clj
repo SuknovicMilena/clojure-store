@@ -1,5 +1,5 @@
-(ns store.query
-  (:require [store.database]
+(ns repository.korisnik
+  (:require [mysql.connection]
             [domain.korisnik :refer :all]
             [korma.core :refer :all]))
 
@@ -44,8 +44,6 @@
 (defn update-user [korisnikId updatedKorisnik]
   (def existingUser (get-user korisnikId))
   (def existingUserByUsername (get-user-by-username (get updatedKorisnik :korisnickoIme)))
-  ; (println korisnikId)
-  ; (println (get existingUserByUsername :korisnikId))
   ; (println (not= (parse-int korisnikId) (get existingUserByUsername :korisnikId)))
   (if existingUser 
     (if (and existingUserByUsername (not= (parse-int korisnikId) (get existingUserByUsername :korisnikId))) 

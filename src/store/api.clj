@@ -3,7 +3,7 @@
             [ring.util.http-response :refer :all]
             [schema.core :as s]
             [domain.korisnik :refer :all]
-            [store.query :refer :all]))
+            [repository.korisnik :refer :all]))
 
 (def app
   (api
@@ -14,6 +14,7 @@
                     :description "API for a college project made with clojure"}
              :tags [{:name "users", :description "users api."}]}}}
 
+    ; Users API
     (context "/users" []
       :tags ["users"]
 
