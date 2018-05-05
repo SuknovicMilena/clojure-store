@@ -20,6 +20,16 @@
   )
 )
 
+(defn get-proizvodi-for-proizvodjac [proizvodjacId]
+  (def proizvodjacToGetProizvodiFor (get-proizvodjac proizvodjacId))
+  (if proizvodjacToGetProizvodiFor 
+    (select proizvod
+      (where {:proizvodjacId [= proizvodjacId]} )
+    )
+    "Ne postoji proizvodjac sa tim ID-em"
+  )
+)
+
 (defn get-proizvod-by-naziv [naziv]
   (first
     (select proizvod

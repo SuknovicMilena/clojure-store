@@ -94,6 +94,12 @@
         (if proizvodjacFromDb (ok proizvodjacFromDb) (not-found))
       )
 
+      (GET "/:id/proizvodi" []
+        :path-params [id :- s/Any]
+        :summary "Vrati sve proizvode proizvodjaca"
+        (ok (get-proizvodi-for-proizvodjac id))
+      )
+
       (POST "/" []
         :summary "Kreiraj novog proizvodjaca"
         :body [newProizvodjac NewProizvodjac]
